@@ -6,6 +6,22 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="systemjs-importmap">
+    {
+         "imports": {
+                "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.9.0/lib/system/single-spa.min.js",
+                "@angular/common": "https://cdn.jsdelivr.net/npm/@angular/common@10.0.6/bundles/common.umd.js",
+                "@angular/core": "https://cdn.jsdelivr.net/npm/@angular/core@10.0.6/bundles/core.umd.js",
+                "@angular/platform-browser": "https://cdn.jsdelivr.net/npm/@angular/platform-browser@10.0.6/bundles/platform-browser.umd.js",
+                "@angular/platform-browser-dynamic": "https://cdn.jsdelivr.net/npm/@angular/platform-browser-dynamic@10.0.6/bundles/platform-browser-dynamic.umd.js",
+                "@angular/router": "https://cdn.jsdelivr.net/npm/@angular/router@10.0.6/bundles/router.umd.js",
+                "rxjs": "https://cdn.jsdelivr.net/npm/rxjs@6.5.5/bundles/rxjs.umd.js",
+                "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.5.4/system/rxjs-operators.min.js",
+                "@angular/compiler": "https://cdn.jsdelivr.net/npm/@angular/compiler@10.0.6/bundles/compiler.umd.js",
+                "tslib": "https://cdnjs.cloudflare.com/ajax/libs/tslib/2.0.0/tslib.min.js"
+            }
+}
+</script>
 </head>
 <body class="pepperi-theme">
   <app-root></app-root>

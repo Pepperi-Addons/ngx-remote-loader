@@ -1,3 +1,5 @@
+<p>addon loader example</p>
 <ng-container *ngFor="let addon of subAddons">
-  <pep-addon [options]="addon"></pep-addon>
+  <addon-proxy [options]="addon"></addon-proxy>
 </ng-container>
+<router-outlet></router-outlet>

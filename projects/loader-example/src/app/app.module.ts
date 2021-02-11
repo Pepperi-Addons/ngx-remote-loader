@@ -1,12 +1,13 @@
-import { MaterialModule } from './modules/material.module';
-import { PepUIModule } from './modules/pepperi.module';
+// import { MaterialModule } from './modules/material.module';
+// import { PepUIModule } from './modules/pepperi.module';
 import { PepRemoteLoaderModule } from '@pepperi-addons/ngx-remote-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
+const routes = [];
 @NgModule({
   declarations: [
     AppComponent
@@ -15,8 +16,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     PepRemoteLoaderModule,
     HttpClientModule,
-    PepUIModule,
-    MaterialModule
+    RouterModule.forRoot(routes)
+    // PepUIModule,
+    // MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

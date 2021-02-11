@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+// Define pep lib theme and include theme styles for pep components.
+@import '~@pepperi-addons/ngx-lib/theming';
+// @import 'ngx-lib/theming';
+@include pepperi-theme();
+
+// Get the theme object.
+$pepperi-theme: get-pepperi-theme();
+
+@import './app/app.component.theme.scss';
+
+body {
+    @include addon-theme($pepperi-theme);
+}

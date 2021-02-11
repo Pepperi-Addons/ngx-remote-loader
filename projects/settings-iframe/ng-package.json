@@ -1,7 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/remote-loader",
+  "dest": "../../dist/settings-iframe",
   "lib": {
-    "entryFile": "./public-api.ts"
+    "entryFile": "public-api.ts"
   }
 }
