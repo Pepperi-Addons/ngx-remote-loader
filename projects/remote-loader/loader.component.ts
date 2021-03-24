@@ -1,6 +1,12 @@
-import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFactoryResolver, Injector, Type, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, EmbeddedViewRef } from '@angular/core';
-import { loadRemoteModule } from '@angular-architects/module-federation';
-import { AddonOptions } from './loader.model';
+import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFactoryResolver,
+  Injector, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, SimpleChanges, NgZone,
+  ɵcreateInjector as createInjector,
+  ɵrenderComponent as renderComponent ,
+  ɵmarkDirty as markDirty,
+  ɵLifecycleHooksFeature} from '@angular/core';
+import { loadRemoteModule, LoadRemoteModuleOptions } from '@angular-architects/module-federation';
+import { RemoteModuleOptions } from './loader.model';
+import { LifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
 
 @Component({
     selector: 'addon-proxy',
@@ -12,48 +18,67 @@ export class PepRemoteLoaderComponent implements OnChanges {
     @ViewChild('placeHolder', { read: ViewContainerRef, static: true })
     viewContainer: ViewContainerRef;
     compRef: ComponentRef<any>;
-    @Input() options: AddonOptions;
-    @Output() change: EventEmitter<any> = new EventEmitter();
+    @Input() options: RemoteModuleOptions;
+    @Output() change: EventEmitter<any> =  new EventEmitter();
 
     constructor(
       private injector: Injector,
       private cfr: ComponentFactoryResolver,
-      private compiler: Compiler
+      private compiler: Compiler,
+      private zone: NgZone
       ) { }
 
-    async ngOnChanges() {
-      this.loadAddon(this.options);
+    async ngOnChanges(changes: SimpleChanges) {
+      if (changes?.options?.currentValue){
+        this.loadAddon(changes?.options?.currentValue);
+
+      }
     }
 
-    async loadAddon(options){
-      this.viewContainer?.clear();
-
-      // Load Module
-      if (this.options?.useModule) {
-        const module =  await loadRemoteModule(this.options).then(m => m);
-        let moduleFactory: NgModuleFactory<any>;
-        if (module[this.options.exposedModule.replace('./','')] instanceof NgModuleFactory) {
-            moduleFactory = module[this.options.exposedModule.replace('./','')];
-        } else {
-            moduleFactory = this.compiler.compileModuleSync(module[this.options.exposedModule.replace('./','')]);
+    async loadAddon(options: RemoteModuleOptions & LoadRemoteModuleOptions){
+      const t0 = performance.now();
+      // Check if only need update
+      if (!options?.update){
+        this.viewContainer?.clear();
+        // Load Component
+        if (options?.noModule) {
+          const component = await loadRemoteModule(options).then(m => m[options.componentName]);
+          const componentFactory = this.cfr.resolveComponentFactory(component);
+          this.compRef = this.viewContainer.createComponent(componentFactory, null, this.injector);
         }
-        const moduleRef = moduleFactory.create(this.injector);
-        const factory = moduleRef.componentFactoryResolver.resolveComponentFactory(module[this.options.componentName]);
-        this.viewContainer.createComponent(factory, null, moduleRef.injector, null, moduleRef);
+        // Load Module
+        else {
+          const module =  await loadRemoteModule(options).then(m => m);
+          let moduleFactory: NgModuleFactory<any>;
+          moduleFactory = this.compiler.compileModuleSync(module[options.exposedModule.replace('./','')]);
+          const moduleRef = moduleFactory.create(this.injector);
+          const factory = moduleRef.componentFactoryResolver.resolveComponentFactory(module[options.componentName]);
+          this.compRef = this.viewContainer.createComponent(factory, null, moduleRef.injector, null, moduleRef);
+          const t1 = performance.now();
+          console.log('performance: ' + (t1-t0)/1000);
+
+        }
+      }
+      if (this.compRef){
+
+        // Send @Input() values
+        // this.compRef.changeDetectorRef.markForCheck();
+        this.compRef.instance.options = options;
+
+        // Listen to @Output() events
+          if (this.compRef?.instance?.ngOnChanges){
+            this.compRef.instance.ngOnChanges(options);
+          }
+        this.compRef?.instance['change']?.subscribe(e => this.change.emit(e));
+        // this.viewContainer.element.nativeElement.addEventListener('customEvent', () => {
+        //   setTimeout(() => {
+
+        //     console.log('Whoops we just triggered CD within the Angular Element.');
+        //   });
+        // });
       }
 
-      // Load Component
-      else {
-        const component = await loadRemoteModule(this.options).then(m => m[this.options.componentName]);
-        const componentFactory = this.cfr.resolveComponentFactory(component);
-        this.compRef = this.viewContainer.createComponent(componentFactory, null, this.injector);
-      }
-      // Send @Input() values
-      this.compRef.instance['options'] = this.options;
-      // Access the component template view
-      (this.compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
-      // Listen to @Output() events
-      this.compRef?.instance['change']?.subscribe(e => this.change.emit(e));
+
     }
 
     ngOnDestroy(): void {

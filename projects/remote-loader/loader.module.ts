@@ -1,12 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
-
-// import { PepNgxLibModule } from '@pepperi-addons/ngx-lib';
 import { PepRemoteLoaderComponent } from './loader.component';
-
-
 @NgModule({
     imports: [
         CommonModule
@@ -15,5 +9,6 @@ import { PepRemoteLoaderComponent } from './loader.component';
     declarations: [PepRemoteLoaderComponent],
 })
 export class PepRemoteLoaderModule {
+
 
 }
