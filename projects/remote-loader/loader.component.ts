@@ -55,7 +55,7 @@ export class PepRemoteLoaderComponent implements OnChanges {
           const factory = moduleRef.componentFactoryResolver.resolveComponentFactory(module[options.componentName]);
           this.compRef = this.viewContainer.createComponent(factory, null, moduleRef.injector, null, moduleRef);
           const t1 = performance.now();
-          console.log('performance: ' + (t1-t0)/1000);
+          console.log('remote module load performance: ' + (t1-t0)/1000);
 
         }
       }
