@@ -55,7 +55,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/loader-example",
             "index": "projects/loader-example/src/index.html",
@@ -73,10 +73,8 @@
             ],
             "scripts": [
 
-            ],
-            "customWebpackConfig": {
-              "path": "projects/loader-example/webpack.config.js"
-            }
+            ]
+
           },
           "configurations": {
             "production": {
@@ -109,16 +107,14 @@
           }
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "loader-example:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "loader-example:build:production",
-              "customWebpackConfig": {
-                "path": "projects/loader-example/webpack.prod.config.js"
-              }
+              "browserTarget": "loader-example:build:production"
+
             }
           }
         },
@@ -215,7 +211,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/mfe1",
             "index": "projects/mfe1/src/index.html",
@@ -230,10 +226,8 @@
             "styles": [
               "projects/mfe1/src/styles.css"
             ],
-            "scripts": [],
-            "customWebpackConfig": {
-              "path": "projects/mfe1/webpack.config.js"
-            }
+            "scripts": []
+
           },
           "configurations": {
             "production": {
@@ -250,15 +244,13 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "customWebpackConfig": {
-                "path": "projects/mfe1/webpack.prod.config.js"
-              }
+              "buildOptimizer": true
+
             }
           }
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "mfe1:build",
             "port": 3000
