@@ -1,18 +1,20 @@
+import { PepAddonService } from '@pepperi-addons/ngx-lib';
 import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFactoryResolver,
   Injector, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, SimpleChanges, NgZone,
   ɵcreateInjector as createInjector,
   ɵrenderComponent as renderComponent ,
   ɵmarkDirty as markDirty,
   ɵLifecycleHooksFeature,
-  ModuleWithComponentFactories} from '@angular/core';
+  ModuleWithComponentFactories,
+  ModuleWithProviders,
+  InjectionToken} from '@angular/core';
 import { loadRemoteModule, LoadRemoteModuleOptions } from '@angular-architects/module-federation';
 import { RemoteModuleOptions } from './loader.model';
 import { LifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
-
 @Component({
     selector: 'addon-proxy',
     template: `
-        <ng-container #placeHolder></ng-container>
+        <ng-template #placeHolder></ng-template>
     `
 })
 export class PepRemoteLoaderComponent implements OnChanges {
@@ -26,7 +28,8 @@ export class PepRemoteLoaderComponent implements OnChanges {
       private injector: Injector,
       private cfr: ComponentFactoryResolver,
       private compiler: Compiler,
-      private zone: NgZone
+      private zone: NgZone,
+      private addon: PepAddonService
       ) { }
 
     async ngOnChanges(changes: SimpleChanges) {
@@ -49,13 +52,15 @@ export class PepRemoteLoaderComponent implements OnChanges {
         }
         // Load Module
         else {
+          const publicPathArr = hostObject.remoteEntry.split('/');
+          this.addon.setAddonStaticFolder(publicPathArr.slice(0, publicPathArr.length - 1).join('/')+'/');
           const module =  await loadRemoteModule(hostObject).then(m => m);
-          let moduleFactory: ModuleWithComponentFactories<any>;
-          moduleFactory = this.compiler.compileModuleAndAllComponentsSync(module[hostObject.exposedModule.replace('./','')]);
-          const moduleRef = moduleFactory.ngModuleFactory.create(this.injector);
-          // const factory = moduleRef.componentFactoryResolver.resolveComponentFactory(module[hostObject.componentName]);
-          const factory = moduleFactory.componentFactories[0];
-          this.compRef = this.viewContainer.createComponent(factory, null, moduleRef.injector, null, moduleRef);
+          let moduleFactory: NgModuleFactory<any>;
+          moduleFactory = this.compiler.compileModuleSync(module[hostObject.exposedModule.replace('./','')]);
+
+          const moduleRef = moduleFactory.create(this.injector);
+          const componentFactory = moduleRef?.componentFactoryResolver?.resolveComponentFactory(module[hostObject.componentName]);
+          this.compRef = this.viewContainer.createComponent(componentFactory, null, moduleRef.injector, null, moduleRef);
           const t1 = performance.now();
           console.log('remote module load performance: ' + (t1-t0)/1000);
 
