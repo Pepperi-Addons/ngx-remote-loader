@@ -4,8 +4,6 @@ export type RemoteModuleOptions = {
   exposedModule?: string;
   remoteEntry?: string;
   remoteName?: string;
-  update?: boolean;
-  noModule?: boolean;
   title: string;
   visibleEndpoint?: string;
   multiSelection?: boolean | string ;
@@ -13,4 +11,6 @@ export type RemoteModuleOptions = {
   type: string | string[];
   subType: string | string[];
   uuid: string;
+  update?: boolean;
+  noModule?: boolean;
 }

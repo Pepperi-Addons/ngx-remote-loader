@@ -1,20 +1,33 @@
 import { Injectable } from '@angular/core';
-import { IPepMenuItemClickEvent } from '@pepperi-addons/ngx-lib/menu';
-import { RemoteModuleOptions } from '@pepperi-addons/ngx-remote-loader/loader.model';
-
+import { PepSessionService } from '@pepperi-addons/ngx-lib';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class LoaderService {
+export class PepAddonLoaderService {
 
-    abstract onMenuClicked();
+    constructor(private session: PepSessionService) {
 
-    abstract onMenuItemClicked(e: IPepMenuItemClickEvent): void;
+    }
 
-    abstract openDialog(remoteModule: RemoteModuleOptions): void ;
+    setAddonPath(uuid: string, url: string){
+      const addonsDictionary = this.session.getObject('AddonsDictionary') ?? {};
+      addonsDictionary[uuid] = url;
+      this.session.setObject('AddonsDictionary', addonsDictionary);
+    }
 
-    abstract addonApi(remoteModule: RemoteModuleOptions);
+    getAddonPath(uuid: string){
+      const addonsDictionary = this.session.getObject('AddonsDictionary')
+      return addonsDictionary[uuid];
+    }
 
-    abstract postAddonApi(remoteModule: RemoteModuleOptions, dialogData);
+    // abstract onMenuClicked();
+
+    // abstract onMenuItemClicked(e: IPepMenuItemClickEvent): void;
+
+    // abstract openDialog(remoteModule: RemoteModuleOptions): void ;
+
+    // abstract addonApi(remoteModule: RemoteModuleOptions);
+
+    // abstract postAddonApi(remoteModule: RemoteModuleOptions, dialogData);
 
 }

@@ -1,7 +1,7 @@
 // import { SubAddonModule } from './sub-addon/module';
 import { MaterialModule } from './modules/material.module';
 import { PepUIModule } from './modules/pepperi.module';
-import { PepRemoteLoaderModule } from '@pepperi-addons/ngx-remote-loader';
+import { PepAddonLoaderModule } from '@pepperi-addons/ngx-remote-loader';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -25,7 +25,7 @@ const routes = [{
   ],
   imports: [
     BrowserModule,
-    PepRemoteLoaderModule,
+    PepAddonLoaderModule,
     HttpClientModule,
     RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     PepUIModule,

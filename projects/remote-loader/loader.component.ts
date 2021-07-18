@@ -1,3 +1,4 @@
+import { PepAddonLoaderService } from './loader.service';
 import { PepAddonService } from '@pepperi-addons/ngx-lib';
 import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFactoryResolver,
   Injector, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, SimpleChanges, NgZone,
@@ -11,25 +12,29 @@ import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFact
 import { loadRemoteModule, LoadRemoteModuleOptions } from '@angular-architects/module-federation';
 import { RemoteModuleOptions } from './loader.model';
 import { LifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
+declare var __webpack_public_path__;
 @Component({
     selector: 'addon-proxy',
     template: `
+        <mat-spinner *ngIf="showSpinner; else placeHolder"></mat-spinner>
         <ng-template #placeHolder></ng-template>
     `
 })
-export class PepRemoteLoaderComponent implements OnChanges {
+export class PepAddonLoaderComponent implements OnChanges {
     @ViewChild('placeHolder', { read: ViewContainerRef, static: true })
     viewContainer: ViewContainerRef;
     compRef: ComponentRef<any>;
     @Input() hostObject: RemoteModuleOptions & object;
     @Output() hostEvents: EventEmitter<any> =  new EventEmitter();
+    showSpinner = true;
 
     constructor(
       private injector: Injector,
       private cfr: ComponentFactoryResolver,
       private compiler: Compiler,
       private zone: NgZone,
-      private addon: PepAddonService
+      private addon: PepAddonService,
+      private loaderService: PepAddonLoaderService
       ) { }
 
     async ngOnChanges(changes: SimpleChanges) {
@@ -53,14 +58,16 @@ export class PepRemoteLoaderComponent implements OnChanges {
         // Load Module
         else {
           const publicPathArr = hostObject.remoteEntry.split('/');
-          this.addon.setAddonStaticFolder(publicPathArr.slice(0, publicPathArr.length - 1).join('/')+'/');
+          const publicPath = publicPathArr.slice(0, publicPathArr.length - 1).join('/')+'/';
+          __webpack_public_path__ = publicPath;
+          // this.addon.setAddonStaticFolder(publicPath);
+          this.loaderService.setAddonPath(hostObject.uuid, publicPath);
           const module =  await loadRemoteModule(hostObject).then(m => m);
           let moduleFactory: NgModuleFactory<any>;
           moduleFactory = this.compiler.compileModuleSync(module[hostObject.exposedModule.replace('./','')]);
-
           const moduleRef = moduleFactory.create(this.injector);
           const componentFactory = moduleRef?.componentFactoryResolver?.resolveComponentFactory(module[hostObject.componentName]);
-          this.compRef = this.viewContainer.createComponent(componentFactory, null, moduleRef.injector, null, moduleRef);
+          this.compRef = this.viewContainer.createComponent(componentFactory, null, this.injector, null, moduleRef);
           const t1 = performance.now();
           console.log('remote module load performance: ' + (t1-t0)/1000);
 
@@ -76,7 +83,13 @@ export class PepRemoteLoaderComponent implements OnChanges {
           if (this.compRef?.instance?.ngOnChanges){
             this.compRef.instance.ngOnChanges(hostObject);
           }
-        this.compRef?.instance['hostEvents']?.subscribe(e => this.hostEvents.emit(e));
+        this.compRef?.instance['hostEvents']?.subscribe(e => {
+          switch(e.action){
+            case 'addon-loaded':
+              this.showSpinner = false;
+          }
+          this.hostEvents.emit(e)
+        });
         // this.viewContainer.element.nativeElement.addEventListener('customEvent', () => {
         //   setTimeout(() => {});});
       }
