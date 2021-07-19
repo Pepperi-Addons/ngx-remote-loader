@@ -16,7 +16,7 @@ declare var __webpack_public_path__;
 @Component({
     selector: 'addon-proxy',
     template: `
-        <mat-spinner *ngIf="showSpinner; else placeHolder"></mat-spinner>
+        <!-- <mat-spinner *ngIf="showSpinner; else placeHolder"></mat-spinner> -->
         <ng-template #placeHolder></ng-template>
     `
 })
