@@ -1,14 +1,21 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PepRemoteLoaderComponent } from './loader.component';
+import { PepAddonLoaderComponent } from './loader.component';
+import { PepSessionService } from '@pepperi-addons/ngx-lib';
+// import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        HttpClientModule,
+        // MatProgressSpinnerModule
     ],
-    exports: [PepRemoteLoaderComponent],
-    declarations: [PepRemoteLoaderComponent],
+    exports: [PepAddonLoaderComponent],
+    declarations: [PepAddonLoaderComponent],
+    providers: [PepSessionService]
 })
-export class PepRemoteLoaderModule {
+export class PepAddonLoaderModule {
 
 
 }
