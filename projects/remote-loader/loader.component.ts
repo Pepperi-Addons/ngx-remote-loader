@@ -25,16 +25,24 @@ export class PepAddonLoaderComponent implements OnChanges {
     @ViewChild('placeHolder', { read: ViewContainerRef, static: true })
     viewContainer: ViewContainerRef;
     
-    private _options: RemoteModuleOptions & LoadRemoteModuleOptions = null;
+    private _options: RemoteModuleOptions = null;
     @Input()
-    set options(value: RemoteModuleOptions & LoadRemoteModuleOptions) {
+    set options(value: RemoteModuleOptions) {
         this._options = value;
         if (value) {
             this.loadAddon();
         }
     }
-    get options(): RemoteModuleOptions & LoadRemoteModuleOptions {
+    get options(): RemoteModuleOptions {
         return this._options;
+    }
+
+    private get optionsForRemoteModule() : LoadRemoteModuleOptions {
+        return {
+            remoteEntry: this._options?.remoteEntry,
+            remoteName: this._options?.remoteName,
+            exposedModule: this._options?.exposedModule
+        };
     }
     
     // This is the data passed by the API Design documentation.
@@ -87,7 +95,7 @@ export class PepAddonLoaderComponent implements OnChanges {
             this.viewContainer?.clear();
             // Load Component
             if (this.options?.noModule) {
-                const component = await loadRemoteModule(this.options).then(m => m[this.options.componentName]);
+                const component = await loadRemoteModule(this.optionsForRemoteModule).then(m => m[this.options.componentName]);
                 const componentFactory = this.cfr.resolveComponentFactory(component);
                 this.compRef = this.viewContainer.createComponent(componentFactory, null, this.injector);
             }
@@ -100,7 +108,7 @@ export class PepAddonLoaderComponent implements OnChanges {
                 // this.loaderService.setAddonPath(hostObject.uuid, publicPath);
                 this.pepAddonService.setAddonStaticFolder(publicPath, this.options.uuid);
 
-                const module =  await loadRemoteModule(this.options).then(m => m);
+                const module =  await loadRemoteModule(this.optionsForRemoteModule).then(m => m);
                 let moduleFactory: NgModuleFactory<any>;
                 moduleFactory = this.compiler.compileModuleSync(module[this.options.exposedModule.replace('./','')]);
                 const moduleRef = moduleFactory.create(this.injector);

@@ -1,9 +1,12 @@
 export type RemoteModuleOptions = {
+    // Those are LoadRemoteModuleOptions properties from '@angular-architects/module-federation';
+    // **********************************************************************************************
+    remoteEntry?: string;
+    remoteName: string;
+    exposedModule: string;
+    // **********************************************************************************************
     moduleData?: object;
     componentName: string;
-    // remoteEntry?: string;
-    // remoteName?: string;
-    // exposedModule?: string;
     title: string;
     visibleEndpoint?: string;
     multiSelection?: boolean | string ;
