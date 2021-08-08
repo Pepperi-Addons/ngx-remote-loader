@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-remote-loader-prod": "ng build remote-loader --configuration production",
+    "publish-remote-loader": "cd dist && cd remote-loader && npm publish"
   },
   "dependencies": {
     "@angular-architects/module-federation": "^12.1.1",
@@ -30,7 +32,7 @@
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@nrwl/workspace": "^10.3.0",
-    "@pepperi-addons/ngx-lib": "^0.1.117",
+    "@pepperi-addons/ngx-lib": "^0.2.15",
     "@pepperi-addons/papi-sdk": "^1.20.2",
     "@progress/kendo-angular-common": "^2.0.0",
     "@progress/kendo-angular-l10n": "^3.0.0",

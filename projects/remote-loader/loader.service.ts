@@ -9,16 +9,16 @@ export class PepAddonLoaderService {
 
     }
 
-    setAddonPath(uuid: string, url: string){
-      const addonsDictionary = this.session.getObject('AddonsDictionary') ?? {};
-      addonsDictionary[uuid] = url;
-      this.session.setObject('AddonsDictionary', addonsDictionary);
-    }
+    // setAddonPath(uuid: string, url: string){
+    //   const addonsDictionary = this.session.getObject('AddonsDictionary') ?? {};
+    //   addonsDictionary[uuid] = url;
+    //   this.session.setObject('AddonsDictionary', addonsDictionary);
+    // }
 
-    getAddonPath(uuid: string){
-      const addonsDictionary = this.session.getObject('AddonsDictionary')
-      return addonsDictionary[uuid];
-    }
+    // getAddonPath(uuid: string){
+    //   const addonsDictionary = this.session.getObject('AddonsDictionary')
+    //   return addonsDictionary[uuid];
+    // }
 
     // abstract onMenuClicked();
 
