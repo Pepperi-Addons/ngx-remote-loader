@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { PepSessionService } from '@pepperi-addons/ngx-lib';
+import { ReplaySubject, Subject } from 'rxjs';
+
+export const propsSubject = new ReplaySubject<any>(1);
+
 @Injectable({
   providedIn: 'root'
 })
-export class PepAddonLoaderService {
 
+export class PepAddonLoaderService {
     constructor(private session: PepSessionService) {
 
     }
