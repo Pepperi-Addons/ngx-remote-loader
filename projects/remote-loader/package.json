@@ -1,13 +1,14 @@
 {
   "name": "@pepperi-addons/ngx-remote-loader",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "peerDependencies": {
     "@angular/common": "^12.0.0",
     "@angular/core": "^12.0.0",
     "@angular-architects/module-federation": "^12.1.1",
     "@angular/material": "^12.0.0",
     "@angular/cdk": "^12.0.0",
-    "@angular/animations": "^12.0.0"
+    "@angular/animations": "^12.0.0",
+    "@pepperi-addons/ngx-lib": "^0.2.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
