@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { PepSessionService } from '@pepperi-addons/ngx-lib';
+// import { PepSessionService } from '@pepperi-addons/ngx-lib';
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PepAddonLoaderService {
 
-    constructor(private session: PepSessionService) {
+    constructor(
+      // private session: PepSessionService
+    ) {
 
     }
 

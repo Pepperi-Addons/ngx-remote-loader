@@ -32,7 +32,7 @@
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@nrwl/workspace": "^10.3.0",
-    "@pepperi-addons/ngx-lib": "^0.2.15",
+    "@pepperi-addons/ngx-lib": "^0.2.17",
     "@pepperi-addons/papi-sdk": "^1.20.2",
     "@progress/kendo-angular-common": "^2.0.0",
     "@progress/kendo-angular-l10n": "^3.0.0",

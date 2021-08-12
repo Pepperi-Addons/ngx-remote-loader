@@ -67,7 +67,7 @@ export class PepAddonLoaderComponent implements OnChanges {
         private compiler: Compiler,
         private zone: NgZone,
         private pepAddonService: PepAddonService,
-        private loaderService: PepAddonLoaderService
+        // private loaderService: PepAddonLoaderService
     ) { }
 
     private setHostComponentIntoComponentRef() {
