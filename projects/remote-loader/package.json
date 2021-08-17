@@ -1,6 +1,6 @@
 {
   "name": "@pepperi-addons/ngx-remote-loader",
-  "version": "0.0.32",
+  "version": "0.0.35",
   "peerDependencies": {
     "@angular/common": "^12.0.0",
     "@angular/core": "^12.0.0",

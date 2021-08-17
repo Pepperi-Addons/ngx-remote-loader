@@ -57,6 +57,7 @@ export class PepAddonLoaderComponent implements OnChanges {
     }
 
     @Output() hostEvents: EventEmitter<any> =  new EventEmitter();
+    @Output() load: EventEmitter<any> =  new EventEmitter();
     // showSpinner = true;
     
     private compRef: ComponentRef<any>;
@@ -118,6 +119,8 @@ export class PepAddonLoaderComponent implements OnChanges {
                 const t1 = performance.now();
                 console.log('remote module load performance: ' + (t1-t0)/1000);
             }
+
+            this.load.emit();
         }
 
         if (this.compRef) {
