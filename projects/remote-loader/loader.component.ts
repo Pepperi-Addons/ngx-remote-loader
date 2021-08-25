@@ -9,13 +9,13 @@ import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFact
   ModuleWithComponentFactories,
   ModuleWithProviders,
   InjectionToken} from '@angular/core';
-import { loadRemoteModule, LoadRemoteModuleOptions } from '@angular-architects/module-federation';
-import { RemoteModuleOptions } from './loader.model';
+import { loadRemoteModule } from '@angular-architects/module-federation';
+import { PepRemoteLoaderOptions } from './loader.model';
 import { LifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
 declare var __webpack_public_path__;
 
 @Component({
-    selector: 'addon-proxy',
+    selector: 'pep-remote-loader',
     template: `
         <!-- <mat-spinner *ngIf="showSpinner; else placeHolder"></mat-spinner> -->
         <ng-template #placeHolder></ng-template>
@@ -25,24 +25,16 @@ export class PepAddonLoaderComponent implements OnChanges {
     @ViewChild('placeHolder', { read: ViewContainerRef, static: true })
     viewContainer: ViewContainerRef;
     
-    private _options: RemoteModuleOptions = null;
+    private _options: PepRemoteLoaderOptions = null;
     @Input()
-    set options(value: RemoteModuleOptions) {
+    set options(value: PepRemoteLoaderOptions) {
         this._options = value;
         if (value) {
             this.loadAddon();
         }
     }
-    get options(): RemoteModuleOptions {
+    get options(): PepRemoteLoaderOptions {
         return this._options;
-    }
-
-    private get optionsForRemoteModule() : LoadRemoteModuleOptions {
-        return {
-            remoteEntry: this._options?.remoteEntry,
-            remoteName: this._options?.remoteName,
-            exposedModule: this._options?.exposedModule
-        };
     }
     
     // This is the data passed by the API Design documentation.
@@ -68,7 +60,6 @@ export class PepAddonLoaderComponent implements OnChanges {
         private compiler: Compiler,
         private zone: NgZone,
         private pepAddonService: PepAddonService,
-        // private loaderService: PepAddonLoaderService
     ) { }
 
     private setHostComponentIntoComponentRef() {
@@ -96,7 +87,7 @@ export class PepAddonLoaderComponent implements OnChanges {
             this.viewContainer?.clear();
             // Load Component
             if (this.options?.noModule) {
-                const component = await loadRemoteModule(this.optionsForRemoteModule).then(m => m[this.options.componentName]);
+                const component = await loadRemoteModule(this.options).then(m => m[this.options.componentName]);
                 const componentFactory = this.cfr.resolveComponentFactory(component);
                 this.compRef = this.viewContainer.createComponent(componentFactory, null, this.injector);
             }
@@ -105,11 +96,9 @@ export class PepAddonLoaderComponent implements OnChanges {
                 const publicPathArr = this.options.remoteEntry.split('/');
                 const publicPath = publicPathArr.slice(0, publicPathArr.length - 1).join('/')+'/';
                 __webpack_public_path__ = publicPath;
-                // this.addon.setAddonStaticFolder(publicPath);
-                // this.loaderService.setAddonPath(hostObject.uuid, publicPath);
-                this.pepAddonService.setAddonStaticFolder(publicPath, this.options.uuid);
+                this.pepAddonService.setAddonStaticFolder(publicPath, this.options.addonId);
 
-                const module =  await loadRemoteModule(this.optionsForRemoteModule).then(m => m);
+                const module =  await loadRemoteModule(this.options).then(m => m);
                 let moduleFactory: NgModuleFactory<any>;
                 moduleFactory = this.compiler.compileModuleSync(module[this.options.exposedModule.replace('./','')]);
                 const moduleRef = moduleFactory.create(this.injector);

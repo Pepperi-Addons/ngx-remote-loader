@@ -1,12 +1,8 @@
-export type RemoteModuleOptions = {
-    // Those are LoadRemoteModuleOptions properties from '@angular-architects/module-federation';
-    // **********************************************************************************************
-    remoteEntry?: string;
-    remoteName: string;
-    exposedModule: string;
-    // **********************************************************************************************
+import { LoadRemoteModuleOptions } from "@angular-architects/module-federation"
+
+type PepRemoteLoaderData = {
     componentName: string;
-    uuid: string;
+    addonId: string;
     update?: boolean;
     noModule?: boolean;
     // title: string;
@@ -18,3 +14,5 @@ export type RemoteModuleOptions = {
     // subType: string | string[];
     // [key:string]: any; // If anyone will need it then add it!!!
 }
+
+export type PepRemoteLoaderOptions = LoadRemoteModuleOptions & PepRemoteLoaderData;

@@ -30,7 +30,7 @@
       <div class="sub-addons-cont" style="">
          <ng-container *ngFor="let p of workflow; let last = last">
            <div class="sub-addons-cont-sub">
-            <addon-proxy [options]="p"></addon-proxy>
+            <pep-remote-loader [options]="p"></pep-remote-loader>
              <i *ngIf="!last" class="arrow right"></i>
            </div>
          </ng-container>
@@ -42,7 +42,7 @@
 <ng-template #dialogTemplate>
   <pep-dialog class="dialog-textarea-container" [title]="'Addon In Dialog'">
     <ng-container  pep-dialog-content>
-        <addon-proxy [options]="dialogAddon"></addon-proxy>
+        <pep-remote-loader [options]="dialogAddon"></pep-remote-loader>
       </ng-container>
     <div pep-dialog-actions class="spacing-element-negative">
             <button mat-button (click)="closeDialog()" class="spacing-element pep-button md weak">
