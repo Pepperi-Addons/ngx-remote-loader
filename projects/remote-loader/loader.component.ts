@@ -1,17 +1,8 @@
-import { PepAddonLoaderService } from './loader.service';
 import { PepAddonService } from '@pepperi-addons/ngx-lib';
 import { Component, Input, OnChanges, ViewChild, ViewContainerRef, ComponentFactoryResolver,
-  Injector, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, SimpleChanges, NgZone,
-  ɵcreateInjector as createInjector,
-  ɵrenderComponent as renderComponent ,
-  ɵmarkDirty as markDirty,
-  ɵLifecycleHooksFeature,
-  ModuleWithComponentFactories,
-  ModuleWithProviders,
-  InjectionToken} from '@angular/core';
+  Injector, NgModuleFactory, Compiler, EventEmitter, Output, ComponentRef, SimpleChanges, NgZone } from '@angular/core';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 import { PepRemoteLoaderOptions } from './loader.model';
-import { LifecycleHooks } from '@angular/compiler/src/lifecycle_reflector';
 declare var __webpack_public_path__;
 
 @Component({
@@ -22,8 +13,7 @@ declare var __webpack_public_path__;
     `
 })
 export class PepAddonLoaderComponent implements OnChanges {
-    @ViewChild('placeHolder', { read: ViewContainerRef, static: true })
-    viewContainer: ViewContainerRef;
+    @ViewChild('placeHolder', { read: ViewContainerRef, static: true }) viewContainer: ViewContainerRef;
     
     private _options: PepRemoteLoaderOptions = null;
     @Input()
